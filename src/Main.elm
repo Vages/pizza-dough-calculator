@@ -105,19 +105,12 @@ view model =
             ]
 
 
+init : Model
 init =
     { balls_of_dough = 1
     , weight_of_each_ball = 250
     , water_percentage = 57
     }
-
-
-yeast_as_proportion_of_flour =
-    0.002
-
-
-salt_as_proportion_of_flour =
-    0.03
 
 
 type alias Model =
@@ -141,6 +134,12 @@ getIngredientAmounts model =
 
         yeast =
             flour * yeast_as_proportion_of_flour
+
+        yeast_as_proportion_of_flour =
+            0.002
+
+        salt_as_proportion_of_flour =
+            0.03
     in
     { flour = flour, water = water, salt = salt, yeast = yeast }
 
