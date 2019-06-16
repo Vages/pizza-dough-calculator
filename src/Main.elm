@@ -10,6 +10,7 @@ import Html exposing (Html)
 import Round exposing (round)
 
 
+main : Program () Model Msg
 main =
     Browser.sandbox { init = init, view = view, update = update }
 
@@ -20,9 +21,13 @@ update msg model =
         WaterPercentageChanged x ->
             { model | water_percentage = x }
 
+        DoughBallWeightChanged x ->
+            { model | weight_of_each_ball = x }
+
 
 type Msg
     = WaterPercentageChanged Float
+    | DoughBallWeightChanged Float
 
 
 view : Model -> Html Msg
@@ -52,6 +57,26 @@ view model =
                         Element.none
                     )
                 ]
+                { onChange = DoughBallWeightChanged
+                , label = Element.Input.labelAbove [] (Element.text ("Dough ball weight: " ++ round 0 model.weight_of_each_ball))
+                , min = 200
+                , max = 300
+                , value = model.weight_of_each_ball
+                , thumb = Element.Input.defaultThumb
+                , step = Just 1
+                }
+            , Element.Input.slider
+                [ Element.behindContent
+                    (Element.el
+                        [ Element.width Element.fill
+                        , Element.height (Element.px 2)
+                        , Element.centerY
+                        , Background.color (rgb 0 0.5 0)
+                        , Border.rounded 2
+                        ]
+                        Element.none
+                    )
+                ]
                 { onChange = WaterPercentageChanged
                 , label = Element.Input.labelAbove [] (Element.text ("Water percentage: " ++ round 0 model.water_percentage))
                 , min = 50
@@ -63,13 +88,17 @@ view model =
             , Element.table []
                 { data = ingredientsAsList
                 , columns =
-                    [ { header = Element.text "Ingredient" |> Element.el [ Font.bold, Element.padding 10 ]
+                    let
+                        tablePadding =
+                            Element.padding 10
+                    in
+                    [ { header = Element.text "Ingredient" |> Element.el [ Font.bold, tablePadding ]
                       , width = shrink
-                      , view = \ingredient -> ingredient.name |> Element.text |> Element.el [ Element.padding 10 ]
+                      , view = \ingredient -> ingredient.name |> Element.text |> Element.el [ tablePadding ]
                       }
-                    , { header = Element.text "Grams" |> Element.el [ Font.bold, Element.padding 10 ]
+                    , { header = Element.text "Grams" |> Element.el [ Font.bold, tablePadding ]
                       , width = shrink
-                      , view = \ingredient -> ingredient.amount |> round 1 |> Element.text |> Element.el [ Element.padding 10 ]
+                      , view = \ingredient -> ingredient.amount |> round 1 |> Element.text |> Element.el [ tablePadding ]
                       }
                     ]
                 }
