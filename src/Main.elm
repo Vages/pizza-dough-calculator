@@ -15,6 +15,27 @@ main =
     Browser.sandbox { init = init, view = view, update = update }
 
 
+type alias Model =
+    { balls_of_dough : Int
+    , weight_of_each_ball : Float
+    , water_percentage : Float
+    }
+
+
+init : Model
+init =
+    { balls_of_dough = 1
+    , weight_of_each_ball = 250
+    , water_percentage = 57
+    }
+
+
+type Msg
+    = WaterPercentageChanged Float
+    | DoughBallWeightChanged Float
+    | SetNumberOfDoughBalls Int
+
+
 update : Msg -> Model -> Model
 update msg model =
     case msg of
@@ -26,12 +47,6 @@ update msg model =
 
         SetNumberOfDoughBalls x ->
             { model | balls_of_dough = x }
-
-
-type Msg
-    = WaterPercentageChanged Float
-    | DoughBallWeightChanged Float
-    | SetNumberOfDoughBalls Int
 
 
 view : Model -> Html Msg
@@ -139,18 +154,11 @@ view model =
             ]
 
 
-init : Model
-init =
-    { balls_of_dough = 1
-    , weight_of_each_ball = 250
-    , water_percentage = 57
-    }
-
-
-type alias Model =
-    { balls_of_dough : Int
-    , weight_of_each_ball : Float
-    , water_percentage : Float
+type alias IngredientAmounts =
+    { flour : Float
+    , water : Float
+    , salt : Float
+    , yeast : Float
     }
 
 
@@ -176,11 +184,3 @@ getIngredientAmounts model =
             0.03
     in
     { flour = flour, water = water, salt = salt, yeast = yeast }
-
-
-type alias IngredientAmounts =
-    { flour : Float
-    , water : Float
-    , salt : Float
-    , yeast : Float
-    }
