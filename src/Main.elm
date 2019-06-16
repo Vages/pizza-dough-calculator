@@ -1,8 +1,12 @@
 module Main exposing (Model, init, main)
 
 import Browser
-import Element exposing (shrink)
+import Element exposing (Color, rgb, shrink)
+import Element.Background as Background
+import Element.Border as Border
 import Element.Font as Font
+import Element.Input
+import Html exposing (Html)
 import Round exposing (round)
 
 
@@ -10,10 +14,18 @@ main =
     Browser.sandbox { init = init, view = view, update = update }
 
 
-update _ model =
-    model
+update : Msg -> Model -> Model
+update msg model =
+    case msg of
+        WaterPercentageChanged x ->
+            { model | water_percentage = x }
 
 
+type Msg
+    = WaterPercentageChanged Float
+
+
+view : Model -> Html Msg
 view model =
     let
         ingredientAmounts =
@@ -27,8 +39,28 @@ view model =
             ]
     in
     Element.layout [] <|
-        Element.el [ Element.centerX, Element.centerY ] <|
-            Element.table []
+        Element.column [ Element.centerX, Element.centerY ]
+            [ Element.Input.slider
+                [ Element.behindContent
+                    (Element.el
+                        [ Element.width Element.fill
+                        , Element.height (Element.px 2)
+                        , Element.centerY
+                        , Background.color (rgb 0 0.5 0)
+                        , Border.rounded 2
+                        ]
+                        Element.none
+                    )
+                ]
+                { onChange = WaterPercentageChanged
+                , label = Element.Input.labelAbove [] (Element.text ("Water percentage: " ++ round 0 model.water_percentage))
+                , min = 50
+                , max = 70
+                , value = model.water_percentage
+                , thumb = Element.Input.defaultThumb
+                , step = Just 1
+                }
+            , Element.table []
                 { data = ingredientsAsList
                 , columns =
                     [ { header = Element.text "Ingredient" |> Element.el [ Font.bold, Element.padding 10 ]
@@ -41,6 +73,7 @@ view model =
                       }
                     ]
                 }
+            ]
 
 
 init =
