@@ -1,7 +1,8 @@
 module Main exposing (Model, init, main)
 
 import Browser
-import Html exposing (..)
+import Element exposing (shrink)
+import Element.Font as Font
 import Round exposing (round)
 
 
@@ -17,13 +18,29 @@ view model =
     let
         ingredientAmounts =
             getIngredientAmounts model
+
+        ingredientsAsList =
+            [ { name = "flour", amount = ingredientAmounts.flour }
+            , { name = "water", amount = ingredientAmounts.water }
+            , { name = "yeast", amount = ingredientAmounts.yeast }
+            , { name = "salt", amount = ingredientAmounts.salt }
+            ]
     in
-    ul []
-        [ li [] [ text <| "Flour: " ++ round 1 ingredientAmounts.flour ++ " g" ]
-        , li [] [ text <| "Water: " ++ round 1 ingredientAmounts.water ++ " g" ]
-        , li [] [ text <| "Salt: " ++ round 1 ingredientAmounts.salt ++ " g" ]
-        , li [] [ text <| "Yeast: " ++ round 1 ingredientAmounts.yeast ++ " g" ]
-        ]
+    Element.layout [] <|
+        Element.el [ Element.centerX, Element.centerY ] <|
+            Element.table []
+                { data = ingredientsAsList
+                , columns =
+                    [ { header = Element.text "Ingredient" |> Element.el [ Font.bold, Element.padding 10 ]
+                      , width = shrink
+                      , view = \ingredient -> ingredient.name |> Element.text |> Element.el [ Element.padding 10 ]
+                      }
+                    , { header = Element.text "Grams" |> Element.el [ Font.bold, Element.padding 10 ]
+                      , width = shrink
+                      , view = \ingredient -> ingredient.amount |> round 1 |> Element.text |> Element.el [ Element.padding 10 ]
+                      }
+                    ]
+                }
 
 
 init =
