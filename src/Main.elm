@@ -42,10 +42,9 @@ view model =
             , { name = "yeast", amount = ingredientAmounts.yeast }
             , { name = "salt", amount = ingredientAmounts.salt }
             ]
-    in
-    Element.layout [] <|
-        Element.column [ Element.centerX, Element.centerY ]
-            [ Element.Input.slider
+
+        doughBallInput =
+            Element.Input.slider
                 [ Element.behindContent
                     (Element.el
                         [ Element.width Element.fill
@@ -65,7 +64,9 @@ view model =
                 , thumb = Element.Input.defaultThumb
                 , step = Just 1
                 }
-            , Element.Input.slider
+
+        waterPercentageInput =
+            Element.Input.slider
                 [ Element.behindContent
                     (Element.el
                         [ Element.width Element.fill
@@ -85,7 +86,9 @@ view model =
                 , thumb = Element.Input.defaultThumb
                 , step = Just 1
                 }
-            , Element.table []
+
+        ingredientTable =
+            Element.table []
                 { data = ingredientsAsList
                 , columns =
                     let
@@ -102,6 +105,12 @@ view model =
                       }
                     ]
                 }
+    in
+    Element.layout [] <|
+        Element.column [ Element.centerX, Element.centerY ]
+            [ doughBallInput
+            , waterPercentageInput
+            , ingredientTable
             ]
 
 
