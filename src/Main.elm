@@ -17,7 +17,7 @@ main =
 
 
 type alias Model =
-    { balls_of_dough : Int
+    { number_of_dough_balls : Int
     , weight_of_each_ball : Float
     , water_percentage : Float
     }
@@ -25,7 +25,7 @@ type alias Model =
 
 init : Model
 init =
-    { balls_of_dough = 1
+    { number_of_dough_balls = 1
     , weight_of_each_ball = 250
     , water_percentage = 57
     }
@@ -47,7 +47,7 @@ update msg model =
             { model | weight_of_each_ball = x }
 
         SetNumberOfDoughBalls x ->
-            { model | balls_of_dough = x }
+            { model | number_of_dough_balls = x }
 
 
 view : Model -> Html Msg
@@ -72,13 +72,13 @@ view model =
                     parseResult =
                         String.toInt newValue
                 in
-                SetNumberOfDoughBalls <| Maybe.withDefault model.balls_of_dough parseResult
+                SetNumberOfDoughBalls <| Maybe.withDefault model.number_of_dough_balls parseResult
 
         numberOfDoughBallsInput =
             Element.Input.text
                 []
                 { onChange = parseDoughBalls
-                , text = String.fromInt model.balls_of_dough
+                , text = String.fromInt model.number_of_dough_balls
                 , placeholder = Nothing
                 , label = Element.Input.labelAbove [] (Element.text "Number of dough balls")
                 }
@@ -174,7 +174,7 @@ getIngredientAmounts : Model -> IngredientAmounts
 getIngredientAmounts model =
     let
         flour =
-            (toFloat model.balls_of_dough * model.weight_of_each_ball) / (1 + (model.water_percentage / 100) + yeast_as_proportion_of_flour + salt_as_proportion_of_flour)
+            (toFloat model.number_of_dough_balls * model.weight_of_each_ball) / (1 + (model.water_percentage / 100) + yeast_as_proportion_of_flour + salt_as_proportion_of_flour)
 
         water =
             flour * model.water_percentage / 100
