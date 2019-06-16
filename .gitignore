@@ -75,3 +75,5 @@ elm-stuff
 # elm-repl generated files
 repl-temp-*
 
+dist/
+node_modules/

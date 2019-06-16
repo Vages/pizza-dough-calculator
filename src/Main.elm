@@ -6,6 +6,7 @@ import Element.Background as Background
 import Element.Border as Border
 import Element.Font as Font
 import Element.Input
+import Element.Region
 import Html exposing (Html)
 import Round exposing (round)
 
@@ -147,7 +148,14 @@ view model =
     in
     Element.layout [] <|
         Element.column [ Element.centerX, Element.centerY ]
-            [ numberOfDoughBallsInput
+            [ Element.row
+                [ Element.Region.heading 1
+                , Font.bold
+                , Font.center
+                , Font.size 32
+                ]
+                [ Element.text "Pizza dough calculator" ]
+            , numberOfDoughBallsInput
             , doughBallInput
             , waterPercentageInput
             , ingredientTable

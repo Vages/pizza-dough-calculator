@@ -1,0 +1,21 @@
+{
+  "name": "pizza-dough-calculator",
+  "version": "1.0.0",
+  "description": "Calculates the proportions of different ingredients in a good pizza dough. Inspired by https://www.frenchguycooking.com/pizzadough",
+  "main": "index.js",
+  "repository": "https://github.com/Vages/pizza-dough-calculator.git",
+  "author": "Eirik Vageskar <eirikvageskar@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "elm-hot": "^1.1.0",
+    "gh-pages": "^2.0.1",
+    "node-elm-compiler": "^5.0.3",
+    "parcel-bundler": "^1.12.3"
+  },
+  "scripts": {
+    "build": "rm -rf dist && parcel build src/index.html",
+    "dev": "parcel src/index.html",
+    "predeploy": "yarn run build",
+    "deploy": "gh-pages -d dist"
+  }
+}
