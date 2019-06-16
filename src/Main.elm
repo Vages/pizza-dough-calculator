@@ -62,7 +62,7 @@ view model =
                 , max = 300
                 , value = model.weight_of_each_ball
                 , thumb = Element.Input.defaultThumb
-                , step = Just 1
+                , step = Just 10
                 }
 
         waterPercentageInput =
