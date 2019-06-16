@@ -24,10 +24,14 @@ update msg model =
         DoughBallWeightChanged x ->
             { model | weight_of_each_ball = x }
 
+        SetNumberOfDoughBalls x ->
+            { model | balls_of_dough = x }
+
 
 type Msg
     = WaterPercentageChanged Float
     | DoughBallWeightChanged Float
+    | SetNumberOfDoughBalls Int
 
 
 view : Model -> Html Msg
@@ -42,6 +46,26 @@ view model =
             , { name = "yeast", amount = ingredientAmounts.yeast }
             , { name = "salt", amount = ingredientAmounts.salt }
             ]
+
+        parseDoughBalls newValue =
+            if newValue == "" then
+                SetNumberOfDoughBalls 0
+
+            else
+                let
+                    parseResult =
+                        String.toInt newValue
+                in
+                SetNumberOfDoughBalls <| Maybe.withDefault model.balls_of_dough parseResult
+
+        numberOfDoughBallsInput =
+            Element.Input.text
+                []
+                { onChange = parseDoughBalls
+                , text = String.fromInt model.balls_of_dough
+                , placeholder = Nothing
+                , label = Element.Input.labelAbove [] (Element.text "Number of dough balls")
+                }
 
         doughBallInput =
             Element.Input.slider
@@ -108,7 +132,8 @@ view model =
     in
     Element.layout [] <|
         Element.column [ Element.centerX, Element.centerY ]
-            [ doughBallInput
+            [ numberOfDoughBallsInput
+            , doughBallInput
             , waterPercentageInput
             , ingredientTable
             ]
@@ -123,7 +148,7 @@ init =
 
 
 type alias Model =
-    { balls_of_dough : Float
+    { balls_of_dough : Int
     , weight_of_each_ball : Float
     , water_percentage : Float
     }
@@ -133,7 +158,7 @@ getIngredientAmounts : Model -> IngredientAmounts
 getIngredientAmounts model =
     let
         flour =
-            (model.balls_of_dough * model.weight_of_each_ball) / (1 + (model.water_percentage / 100) + yeast_as_proportion_of_flour + salt_as_proportion_of_flour)
+            (toFloat model.balls_of_dough * model.weight_of_each_ball) / (1 + (model.water_percentage / 100) + yeast_as_proportion_of_flour + salt_as_proportion_of_flour)
 
         water =
             flour * model.water_percentage / 100
